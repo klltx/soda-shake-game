@@ -14,7 +14,6 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
-    "react-native-sound": "^0.11.0",
     "react-native-web": "~0.13.12",
     "expo-av": "~9.2.3",
     "expo-keep-awake": "~9.2.0"
