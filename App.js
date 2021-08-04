@@ -18,9 +18,14 @@ export default function App() {
   const [shakeSum, setShakeSum] = useState(0),
     [sumEndGame, setSumEndGame] = useState(getRandomInt(MIN_ENDPOINT, MAX_ENDPOINT)),
     [isEndGame, setIsEndGame] = useState(false);
+    // [soundOpenBottle, setSoundOpenBottle] = useState(new Audio.Sound()),
+    // [soundEndGame, setSoundEndGame] = useState(new Audio.Sound()),
+    // [soundShakeBottle, setSoundShakeBottle] = useState(new Audio.Sound());
 
-  useEffect(() => {
-    _subscribe();
+    
+    useEffect(() => {
+      // initSounds();
+      _subscribe();
     return () => _unsubscribe();
   })
 
@@ -29,6 +34,14 @@ export default function App() {
   }, [shakeSum])
 
   useKeepAwake();
+
+  const initSounds = async() => {
+    try {
+      await soundShakeBottle.loadAsync(require(`./assets/sounds/shakeBottle2.wav`));
+      await soundOpenBottle.loadAsync(require(`./assets/sounds/openBottle1.mp3`));
+      await soundEndGame.loadAsync(require(`./assets/sounds/endGame.mp3`));
+    } catch(e) { console.log(e); }
+  }
 
   function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -60,6 +73,24 @@ export default function App() {
     } catch(error) { console.log(error) }
   }
 
+  // const playSoundShakeBottle = async() => {
+  //   try {
+  //     await soundShakeBottle.playAsync();
+  //   } catch(e) { console.log(e) }
+  // }
+
+  // const playSoundOpenBottle = async() => {
+  //   try {
+  //     await soundOpenBottle.playAsync();
+  //   } catch(e) { console.log(e) }
+  // }
+  
+  // const playSoundEndGame = async() => {
+  //   try {
+  //     await soundEndGame.playAsync();
+  //   } catch(e) { console.log(e) }
+  // }
+
   const setNewGame = () => {
     setIsEndGame(false);
     setShakeSum(0);
@@ -90,23 +121,21 @@ export default function App() {
 
   const _unsubscribe = () => {
     DeviceMotion.removeAllListeners();
+    // soundShakeBottle.unloadAsync();
+    // soundOpenBottle.unloadAsync();
+    // soundEndGame.unloadAsync();
   }
 
   return (
     <View style={ styles.container }>
-      <ImageBackground source={ imageBottle } style={ styles.imageBG }></ImageBackground>
-      <StatusBar style="auto" />
+      <ImageBackground source={ require('./assets/images/background.png') } style={ styles.imageBG } />
 
       <View style={ isEndGame ? styles.endBG : styles.hidden }></View>
       
       <View style={ isEndGame ? styles.endScreen : styles.hidden }>
-        {/* <TouchableHighlight onPress={ setNewGame } underlayColor='#fff' >
-          <Image style={ styles.replayLogo } source={ imageReplay } />
-        </TouchableHighlight> */}
         <TouchableWithoutFeedback onPress={ setNewGame } >
-          <Image style={ styles.replayLogo } source={ imageReplay } />
+          <Image style={ styles.replayLogo } source={ require('./assets/images/replay.webp') } />
         </TouchableWithoutFeedback>
-        {/* <Button title='play again' onPress={ setNewGame } /> */}
       </View>
     </View>
   );
